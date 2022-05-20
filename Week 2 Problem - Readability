@@ -1,0 +1,83 @@
+#include <cs50.h>
+#include <stdio.h>
+#include <math.h>
+#include <ctype.h>
+#include <string.h>
+
+//Coleman-Liau index = 0.0588*L - 0.296*S - 15.8;
+//L = average letters/100 words; S = average number of sentences/100 words;
+
+//Function prototype to count number of letters in text.
+int count_letters(string text);
+//Function prototype to count number of words in text.
+int count_words(string text);
+//Function prototype to count number of sentences in text.
+int count_sentences(string text);
+
+int main(void)
+{
+    //Get text from user and print number of letters.
+    string text = get_string("Text: ");
+    int letters = count_letters(text);
+    //printf("%f letters\n", letters);
+    int words = count_words(text);
+    //printf("%f words\n", words);
+    int sentences = count_sentences(text);
+    //printf("%f sentences\n", sentences);
+
+    //Value of L & S
+    float L = (float) letters/ (float) words * 100;
+    float S = (float) sentences/ (float) words * 100;
+    //printf("L = %f, S = %f\n", L , S);
+    //Value of Index
+    int index = round(0.0588*L - 0.296*S - 15.8);
+    //printf("Index %f\n", index);
+    if (index >= 16)
+    {
+        printf("Grade 16+\n");
+    }
+    else if (index < 1)
+    {
+        printf("Before Grade 1\n");
+    }
+    else
+    {
+        printf("Grade %i\n", index);
+    }
+}
+
+//Function to count letters
+int count_letters(string text)
+{
+    int count = 0;
+    for (int i = 0, lens = strlen(text); i < lens; i++)
+    {
+        if ((text[i] >= 65 && text[i] <= 90) || (text[i] >= 97 && text[i] <= 122))
+        count += 1;
+    }
+    return count;
+}
+
+//Function to count words
+int count_words(string text)
+{
+    int count = 1;
+    for (int i = 0, lens = strlen(text); i < lens; i++)
+    {
+        if (text[i] == ' ' && text[i+1] != ' ')
+        count += 1;
+    }
+    return count;
+}
+
+//Function to count sentences
+int count_sentences(string text)
+{
+    int count = 0;
+    for (int i = 0, lens = strlen(text); i < lens; i++)
+    {
+        if (text[i] == '.' || text[i] == '!' || text[i] == '?')
+        count += 1;
+    }
+    return count;
+}
